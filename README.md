@@ -35,6 +35,11 @@ Si solo deseas usar la aplicación sin programar:
 2. Descomprímelo en tu PC.
 3. Ejecuta `Gestor Alumno.exe`.
 
+### 🗑️ Desinstalación
+Para realizar una desinstalación limpia y eliminar el acceso directo:
+1. Ejecuta el archivo `Desinstalar_Gestor.bat` incluido en el paquete.
+2. Sigue las instrucciones en pantalla para confirmar la eliminación.
+
 ---
 
 ## 👨‍💻 Configuración para Desarrolladores

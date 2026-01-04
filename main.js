@@ -1,6 +1,5 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
-import isDev from 'electron-is-dev';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +17,8 @@ function createWindow() {
         },
         autoHideMenuBar: true,
     });
+
+    const isDev = !app.isPackaged;
 
     const startUrl = isDev
         ? 'http://localhost:5173'
