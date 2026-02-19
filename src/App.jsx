@@ -156,7 +156,7 @@ function App() {
             {/* Sidebar Donezo Style */}
             <aside className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
                 <div className="sidebar-logo">
-                    <img src="./logo.jpeg" alt="Logo" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
+                    <img src="/logo.jpeg" alt="Logo" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
                     <span className="logo-text">Gestor Alumno</span>
                     <button className="close-menu-btn" onClick={() => setIsMobileMenuOpen(false)}>
                         <X size={24} />
