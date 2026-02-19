@@ -15,7 +15,9 @@ import {
     Trash2,
     Edit2,
     RefreshCw,
-    Phone
+    Phone,
+    Menu,
+    X
 } from 'lucide-react';
 import { studentService } from './services/studentService';
 import StudentModal from './components/StudentModal';
@@ -28,6 +30,7 @@ function App() {
     const [statusFilter, setStatusFilter] = useState('todos');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingStudent, setEditingStudent] = useState(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         fetchStudents();
@@ -151,23 +154,26 @@ function App() {
     return (
         <div className="app-wrapper">
             {/* Sidebar Donezo Style */}
-            <aside className="sidebar">
+            <aside className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
                 <div className="sidebar-logo">
-                    <img src="../logo.jpeg" alt="Logo" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
+                    <img src="./logo.jpeg" alt="Logo" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
                     <span className="logo-text">Gestor Alumno</span>
+                    <button className="close-menu-btn" onClick={() => setIsMobileMenuOpen(false)}>
+                        <X size={24} />
+                    </button>
                 </div>
 
                 <div className="sidebar-nav">
                     <div className="nav-section-title">Menu</div>
                     <div
                         className={`nav-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('dashboard')}
+                        onClick={() => { setActiveTab('dashboard'); setIsMobileMenuOpen(false); }}
                     >
                         <LayoutDashboard size={20} /> Dashboard
                     </div>
                     <div
                         className={`nav-btn ${activeTab === 'students' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('students')}
+                        onClick={() => { setActiveTab('students'); setIsMobileMenuOpen(false); }}
                     >
                         <Users size={20} /> Alumnos
                     </div>
@@ -193,21 +199,27 @@ function App() {
                 {/* Header */}
                 <header className="top-header" style={{ height: 'auto', padding: '16px 32px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                        <div className="search-bar" style={{ width: '100%', maxWidth: '500px' }}>
-                            <Search size={18} color="var(--text-label)" />
-                            <input
-                                placeholder="Buscar por nombre, curso, grupo o contacto..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%' }}>
+                            <button className="menu-btn" onClick={() => setIsMobileMenuOpen(true)}>
+                                <Menu size={24} color="var(--text-main)" />
+                            </button>
+
+                            <div className="search-bar" style={{ flex: 1 }}>
+                                <Search size={18} color="var(--text-label)" />
+                                <input
+                                    placeholder="Buscar..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
                         </div>
 
                         <div className="header-actions">
                             <div className="profile-card">
                                 <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', color: 'white' }}>AD</div>
-                                <div>
+                                <div className="profile-info-desktop">
                                     <p style={{ fontSize: '0.8rem', fontWeight: '700' }}>Gestor Alumno</p>
-                                    <p style={{ fontSize: '0.65rem', color: 'var(--text-label)' }}>Conectado: Sheets</p>
+                                    <p style={{ fontSize: '0.65rem', color: 'var(--text-label)' }}>Conectado</p>
                                 </div>
                             </div>
                         </div>
@@ -242,19 +254,19 @@ function App() {
                 <main className="content-area">
                     <div className="dashboard-title-row">
                         <div>
-                            <h1 style={{ fontSize: '2rem', fontWeight: '800' }}>{activeTab === 'dashboard' ? 'Dashboard' : 'Alumnos'}</h1>
-                            <p style={{ color: 'var(--text-label)', fontSize: '0.9rem' }}>
+                            <h1 style={{ fontSize: '1.5rem', fontWeight: '800' }}>{activeTab === 'dashboard' ? 'Dashboard' : 'Alumnos'}</h1>
+                            <p className="subtitle-text" style={{ color: 'var(--text-label)', fontSize: '0.9rem' }}>
                                 {activeTab === 'dashboard' ? 'Planifica y supervisa a tus alumnos con facilidad.' : 'Gestiona los registros y perfiles académicos.'}
                             </p>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '12px' }}>
-                            <button className="btn-donezo btn-donezo-outline" onClick={fetchStudents}>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            <button className="btn-donezo btn-donezo-outline icon-only-mobile" onClick={fetchStudents} title="Sincronizar">
                                 <RefreshCw size={16} className={loading && !isModalOpen ? 'spin' : ''} />
-                                Sincronizar
+                                <span className="hide-on-mobile">Sincronizar</span>
                             </button>
-                            <button className="btn-donezo btn-donezo-primary" onClick={() => { setEditingStudent(null); setIsModalOpen(true); }}>
-                                <Plus size={18} /> Agregar Alumno
+                            <button className="btn-donezo btn-donezo-primary icon-only-mobile" onClick={() => { setEditingStudent(null); setIsModalOpen(true); }} title="Agregar Alumno">
+                                <Plus size={18} /> <span className="hide-on-mobile">Agregar Alumno</span>
                             </button>
                         </div>
                     </div>
@@ -335,18 +347,18 @@ function App() {
                                     <tbody>
                                         {filteredStudents.filter(Boolean).map((s, idx) => (
                                             <tr key={idx}>
-                                                <td>
+                                                <td data-label="Alumno">
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                                         <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--bg-input)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', border: '1px solid var(--border-strong)', color: 'var(--primary)', overflow: 'hidden' }}>
                                                             {String(s.Nombres || '?')[0]}{String(s.Apellidos || '?')[0]}
                                                         </div>
-                                                        <div>
+                                                        <div style={{ textAlign: 'left' }}>
                                                             <p style={{ fontWeight: '700', fontSize: '0.9rem' }}>{s.Nombres || 'Sin nombre'} {s.Apellidos || ''}</p>
                                                             <p style={{ fontSize: '0.7rem', color: 'var(--text-label)' }}>Resp: {s.Apoderado || 'N/A'}</p>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
+                                                <td data-label="Contacto">
                                                     {s.Email ? (
                                                         <a
                                                             href={`mailto:${s.Email}`}
@@ -365,7 +377,7 @@ function App() {
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             title="Enviar WhatsApp"
-                                                            style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}
+                                                            style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px', justifyContent: 'flex-end' }}
                                                         >
                                                             <Phone size={10} /> {s.Teléfono || s.Telefono}
                                                         </a>
@@ -373,18 +385,18 @@ function App() {
                                                         <p style={{ fontSize: '0.75rem', color: 'var(--text-label)' }}>-</p>
                                                     )}
                                                 </td>
-                                                <td>
+                                                <td data-label="Programa">
                                                     <p style={{ fontWeight: '600', fontSize: '0.85rem' }}>Nivel {s.Nivel} • {s.Grupo}</p>
-                                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-label)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-label)', display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
                                                         <Clock size={12} /> {s.Horario || 'Sin horario'}
                                                     </p>
                                                 </td>
-                                                <td>
-                                                    <span className={`status-pill status-${String(s.Estado || 'desconocido').toLowerCase()}`} style={{ transform: 'scale(0.9)', transformOrigin: 'left' }}>
+                                                <td data-label="Estado">
+                                                    <span className={`status-pill status-${String(s.Estado || 'desconocido').toLowerCase()}`} style={{ transform: 'scale(0.9)', transformOrigin: 'right' }}>
                                                         {s.Estado || 'Desconocido'}
                                                     </span>
                                                 </td>
-                                                <td style={{ textAlign: 'right' }}>
+                                                <td data-label="Acciones" style={{ textAlign: 'right' }}>
                                                     <div style={{ display: 'flex', gap: '4px', justifyContent: 'flex-end' }}>
                                                         <button className="btn-donezo btn-donezo-outline" style={{ padding: '6px', minWidth: 'auto', borderRadius: '8px' }} onClick={() => { setEditingStudent(s); setIsModalOpen(true); }}>
                                                             <Edit2 size={14} />
