@@ -409,15 +409,146 @@ tr:hover td {
   }
 }
 
-::-webkit-scrollbar {
-  width: 6px;
+/* ... (mantener estilos anteriores hasta la línea 423) ... */
+
+/* Mobile Enhancements */
+.menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #e2e8f0;
-  border-radius: 10px;
+.menu-btn:hover {
+  background: var(--bg-input);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #cbd5e1;
+.close-menu-btn {
+  display: none;
 }
+
+.hide-on-mobile {
+  display: inline;
+}
+
+/* Responsive Queries */
+@media (max-width: 1024px) {
+  .sidebar {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    margin: 0;
+    height: 100vh;
+    border-radius: 0;
+    transition: left 0.3s ease;
+    box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .close-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+  .app-wrapper {
+    padding: 0;
+  }
+
+  .main-container {
+    padding: 12px;
+  }
+
+  .menu-btn {
+    display: block;
+  }
+
+  .stat-grid-donezo {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-row-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .top-header {
+    padding: 0 16px;
+    border-radius: var(--radius-lg);
+  }
+
+  .profile-info-desktop {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .stat-grid-donezo {
+    grid-template-columns: 1fr;
+  }
+
+  .hide-on-mobile {
+    display: none;
+  }
+
+  .icon-only-mobile {
+    padding: 8px;
+    min-width: 40px;
+    justify-content: center;
+  }
+
+  .dashboard-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .table-donezo thead {
+    display: none;
+  }
+
+  .table-donezo tr {
+    display: block;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: white;
+  }
+
+  .table-donezo td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--bg-app);
+    text-align: right;
+  }
+
+  .table-donezo td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--text-label);
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  .table-donezo td:last-child {
+    border-bottom: none;
+  }
+}
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.spin { animation: spin 1s linear infinite; }
